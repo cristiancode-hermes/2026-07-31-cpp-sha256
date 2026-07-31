@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sha256 — SHA-256 File Hasher</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1e1e2e;  /* Catppuccin Mocha base */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Fira Code', 'Cascadia Code', monospace;
+    padding: 40px;
+  }
+
+  .terminal {
+    background: #181825;  /* mantle */
+    border-radius: 12px;
+    padding: 24px 28px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    border: 1px solid #313244;  /* surface0 */
+    max-width: 1080px;
+    width: 100%;
+  }
+
+  .terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #313244;
+  }
+
+  .terminal-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+  }
+  .dot-red { background: #f38ba8; }
+  .dot-yellow { background: #f9e2af; }
+  .dot-green { background: #a6e3a1; }
+
+  .terminal-title {
+    color: #6c7086;
+    font-size: 14px;
+    margin-left: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  .terminal-title span {
+    color: #a6adc8;
+  }
+
+  .output {
+    color: #cdd6f4;
+    font-size: 14px;
+    line-height: 1.75;
+    white-space: pre;
+  }
+
+  .output .cmd {
+    color: #a6adc8;
+    font-weight: 600;
+  }
+  .output .cmd::before {
+    content: "$ ";
+    color: #a6e3a1;
+    font-weight: 600;
+  }
+
+  .output .banner {
+    color: #89b4fa;
+    font-weight: 600;
+  }
+
+  .output .dim {
+    color: #585b70;
+  }
+
+  .output .file { color: #89dceb; }
+  .output .size { color: #f9e2af; }
+  .output .hash { color: #a6e3a1; }
+  .output .ok   { color: #a6e3a1; font-weight: 600; }
+  .output .fail { color: #f38ba8; font-weight: 600; }
+  .output .err  { color: #fab387; font-weight: 600; }
+
+  .output .section {
+    margin-top: 14px;
+  }
+
+  .output .footer {
+    color: #6c7086;
+  }
+
+  .prompt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #313244;
+  }
+
+  .prompt-symbol {
+    color: #a6e3a1;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .prompt-text {
+    color: #6c7086;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="terminal">
+  <div class="terminal-header">
+    <div class="terminal-dot dot-red"></div>
+    <div class="terminal-dot dot-yellow"></div>
+    <div class="terminal-dot dot-green"></div>
+    <div class="terminal-title"><span>$</span> ./sha256 -- SHA-256 File Hasher</div>
+  </div>
+
+  <div class="output"><span class="banner">sha256 — SHA-256 File Hasher (C++23)</span>
+<span class="cmd">./sha256 src/main.cpp README.md checksums.sha256</span>
+  <span class="file">src/main.cpp</span>                    <span class="size">20.4 KB</span>  <span class="hash">854727d9f692ad60b9b7f5119ef7cd080c290396ff6cb9af6af312a98217bb3d</span>
+  <span class="file">README.md</span>                        <span class="size">1.7 KB</span>  <span class="hash">e8a3c02d2a24a852ca3a76e02351da16c3b6865ed7842a5715ec36b3f9328ac5</span>
+  <span class="file">checksums.sha256</span>                  <span class="size">181 B</span>   <span class="hash">35cedd1798fb16e18f2d651d9d00348a3034383e7644ad8870e53798ec3a78e5</span>
+
+  <span class="dim">3 file(s) hashed in 1.2 ms — 19.6 MB/s</span>
+
+<span class="cmd">./sha256 -C checksums.sha256</span>
+  <span class="ok">OK</span>   <span class="file">src/main.cpp</span> — 20.4 KB
+  <span class="ok">OK</span>   <span class="file">README.md</span> — 1.7 KB
+
+  <span class="dim">2 verified, 0 mismatched, 0 errors</span>
+
+<span class="cmd">./sha256 -c 0000000000000000000000000000000000000000000000000000000000000000 src/main.cpp</span>
+  <span class="fail">FAIL</span>  <span class="file">src/main.cpp</span> — MISMATCH
+         expected: 0000000000000000000000000000000000000000000000000000000000000000
+         got:      <span class="hash">854727d9f692ad60b9b7f5119ef7cd080c290396ff6cb9af6af312a98217bb3d</span>
+
+<span class="cmd">./sha256 -b 64</span>
+  Hashing 67,108,864 bytes...
+  <span class="size">64 MiB in 289.5 ms — 231.8 MB/s</span> (single-threaded)
+  digest: <span class="hash">601fc533f64b11042a9ae821c272064871306a99496652afb5758c8979d8834d</span>
+
+<span class="footer">exit codes: 0=OK 1=mismatch 2=error  |  --selftest: 3/3 FIPS 180-4 vectors PASS</span></div>
+
+  <div class="prompt">
+    <div class="prompt-symbol">❯</div>
+    <div class="prompt-text">sha256 v1.0 — C++23, zero dependencies — ./sha256 --help for options</div>
+  </div>
+</div>
+</body>
+</html>
