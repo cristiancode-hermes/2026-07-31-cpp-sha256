@@ -1,3 +1,4 @@
 sha256
 build/
 *.o
+git-askpass.sh
